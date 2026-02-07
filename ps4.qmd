@@ -346,13 +346,11 @@ def scrape_enforcement_actions(year: int, month: int, RUN_SCRAPER: bool = False)
 
     df = pd.DataFrame(all_rows).drop_duplicates(subset=["title", "link"]).reset_index(drop=True)
 
-    # Save for reuse when knitting (do NOT commit to git)
     df.to_csv(OUTFILE, index=False)
     return df
 
 # Step 2(b): Starting from January 2024
-# IMPORTANT: do NOT scrape when knitting; reuse the CSV generated in Step 2(c)
-OUTFILE = "enforcement_actions_year_month.csv"   # this is the file you already have
+OUTFILE = "enforcement_actions_year_month.csv" 
 df_all = pd.read_csv(OUTFILE)
 df_all["date_dt"] = pd.to_datetime(df_all["date"]).dt.date
 
@@ -470,10 +468,6 @@ alt.Chart(cat_monthly).mark_line(point=True).encode(
 import pandas as pd
 import altair as alt
 import re
-
-# If df isn't defined yet in your notebook/session, uncomment the next lines:
-# df = pd.read_csv("enforcement_actions_year_month.csv")
-# df["date_dt"] = pd.to_datetime(df["date"])
 
 df["date_dt"] = pd.to_datetime(df["date"])
 df["year_month"] = df["date_dt"].dt.to_period("M").dt.to_timestamp()
